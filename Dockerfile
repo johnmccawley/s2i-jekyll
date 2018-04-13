@@ -12,9 +12,10 @@ LABEL io.k8s.description="Platform for building Jekyll-based static sites" \
       io.openshift.tags="jekyll,3.2.1,static"
 
 # Install required packages
-RUN yum install -y epel-release && \
-yum install -y ruby ruby-devel nginx nodejs && \
-yum clean all -y
+RUN yum install -y centos-release-scl && \
+    INSTALL_PKGS="rh-ruby24 rh-ruby24-ruby-devel rh-ruby24-rubygem-rake rh-ruby24-rubygem-bundler rh-nginx110 rh-nodejs6 rh-nodejs6-npm" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && rpm -V $INSTALL_PKGS && \
+    yum clean all -y
 
 # Install Jekyll and Bundler with RubyGems
 RUN gem install jekyll -v 3.2.1
